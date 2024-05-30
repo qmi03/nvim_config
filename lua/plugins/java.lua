@@ -5,7 +5,6 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-			local workspace_dir = vim.fn.expand("~/.cache/jdtls/workspace") .. project_name
 			local config = {
 				-- The command that starts the language server
 				-- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
@@ -29,14 +28,16 @@ return {
 
 					-- 💀
 					"-jar",
-					"/Users/phamvoquangminh/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.800.v20240330-1250.jar",
+					vim.fn.expand(
+						"~/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.800.v20240330-1250.jar"
+					),
 					-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
 					-- Must point to the                                                     Change this to
 					-- eclipse.jdt.ls installation                                           the actual version
 
 					-- 💀
 					"-configuration",
-					"/Users/phamvoquangminh/.local/share/nvim/mason/packages/jdtls/config_mac",
+					vim.fn.expand("~/.local/share/nvim/mason/packages/jdtls/config_mac"),
 					-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
 					-- Must point to the                      Change to one of `linux`, `win` or `mac`
 					-- eclipse.jdt.ls installation            Depending on your system.
@@ -44,7 +45,7 @@ return {
 					-- 💀
 					-- See `data directory configuration` section in the README
 					"-data",
-					workspace_dir,
+					vim.fn.expand("~/.cache/jdtls/workspace") .. project_name,
 				},
 
 				-- 💀
