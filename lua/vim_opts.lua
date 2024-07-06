@@ -19,6 +19,7 @@ opt.smartcase = true
 
 -- cursor line
 opt.cursorline = true
+opt.guicursor = "n-v-i-c:block-cursor"
 
 -- appearance
 opt.termguicolors = true
