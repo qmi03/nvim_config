@@ -24,6 +24,9 @@ return {
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
 			local util = require("lspconfig.util")
+			local mason_registry = require("mason-registry")
+			local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+				.. "/node_modules/@vue/language-server"
 			local on_attach = function(client, bufnr)
 				local function buf_set_keymap(...)
 					vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -49,15 +52,45 @@ return {
 			end
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
+				on_attach = on_attach,
 			})
-			lspconfig.tsserver.setup({
+			lspconfig.zls.setup({
 				capabilities = capabilities,
+				on_attach = on_attach,
 			})
-			lspconfig.pyright.setup({
+			lspconfig.gleam.setup({
 				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.denols.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+				root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+			})
+
+			lspconfig.ts_ls.setup({
+				init_options = {
+					{
+						plugins = {
+							name = "@vue/typescript-plugin",
+							location = vue_language_server_path,
+							languages = { "vue" },
+						},
+					},
+				},
+				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+				capabilities = capabilities,
+				on_attach = on_attach,
+				root_dir = lspconfig.util.root_pattern("package.json"),
+				single_file_support = false,
+			})
+			lspconfig.pylsp.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
 			})
 			lspconfig.emmet_language_server.setup({
 				capabilities = capabilities,
+				on_attach = on_attach,
 			})
 			lspconfig.rust_analyzer.setup({
 				on_attach = on_attach,
@@ -80,6 +113,37 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			lspconfig.cmake.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.clangd.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+				cmd = {
+					"clangd",
+					"--header-insertion=never",
+					"--query-driver=/usr/bin/clang++,/opt/homebrew/opt/mpich/bin/mpicc",
+				}, -- Adjust driver paths as needed
+				init_options = {
+					clangdFileStatus = true,
+				},
+				settings = {
+					clangd = {
+						arguments = { "-I/opt/homebrew/opt/mpich/include" }, -- Include path for MPICH headers
+					},
+				},
+				formatter = "clang-format",
+			})
+			lspconfig.sourcekit.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.unison.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.volar.setup({})
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
