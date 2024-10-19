@@ -1,18 +1,49 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
+		event = "VimEnter",
 		tag = "0.1.6",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+				cond = function()
+					return vim.fn.executable("make") == 1
+				end,
+			},
+			"nvim-telescope/telescope-ui-select.nvim",
+		},
 		config = function()
+			local telescope = require("telescope")
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<C-p>", builtin.find_files, {})
+			pcall(telescope.load_extension, "fzf")
+			pcall(telescope.load_extension, "ui-select")
+
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+			vim.keymap.set("n", "<leader>fk", builtin.keymaps, {})
 			vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-		end,
-	},
-	{
-		"nvim-telescope/telescope-ui-select.nvim",
-		config = function()
-			require("telescope").setup({
+			vim.keymap.set("n", "<leader>f/", function()
+				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+					winblend = 12,
+					previewer = false,
+				}))
+			end, {})
+			vim.keymap.set("n", "<leader>fn", function()
+				builtin.find_files({ cwd = vim.fn.stdpath("config") })
+			end, {})
+			--			vim.keymap.set("n", "<leader>ph>", function()
+			--	builtin.find_files({ hidden = true, no_ignore = true })
+			--		end, {})
+			vim.keymap.set("n", "<leader>fgh", function()
+				builtin.live_grep({
+					additional_args = function(opts)
+						return { "--hidden", "--no-ignore" }
+					end,
+				})
+			end, {})
+			telescope.setup({
 				extensions = {
 					file_browser = { layout_strategy = "horizontal", sorting_strategy = "ascending" },
 					heading = { treesitter = true },
@@ -23,7 +54,7 @@ return {
 					},
 				},
 				defaults = {
-					cache_picker = { num_pickers = 10 },
+					cache_picker = { num_pickers = 12 },
 					dynamic_preview_title = true,
 					layout_strategy = "vertical",
 					layout_config = {
@@ -33,7 +64,6 @@ return {
 					wrap_results = true,
 				},
 			})
-			require("telescope").load_extension("ui-select")
 		end,
 	},
 }
