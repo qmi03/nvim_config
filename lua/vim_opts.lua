@@ -42,7 +42,6 @@ vim.o.guicursor = table.concat({
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
-
 -- backspace
 opt.backspace = "indent,eol,start"
 
