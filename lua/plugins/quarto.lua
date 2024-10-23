@@ -32,4 +32,8 @@ return {
 			vim.keymap.set("n", "<leader>qp", require("quarto").quartoPreview, { silent = true, noremap = true })
 		end,
 	},
+	{
+		"jpalardy/vim-slime",
+	},
+	"ekickx/clipboard-image.nvim",
 }
