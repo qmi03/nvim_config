@@ -84,11 +84,27 @@ return {
 				root_dir = lspconfig.util.root_pattern("package.json"),
 				single_file_support = false,
 			})
-			lspconfig.pylsp.setup({
+			lspconfig.volar.setup({
+				capabilities = capabilities,
+				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+				init_options = {
+					vue = {
+						hybridMode = false,
+					},
+					typescript = {
+						tsdk = "/Users/phamvoquangminh/.local/share/nvim/mason/packages/vue-language-server/node_modules/typescript/lib/",
+					},
+				},
+			})
+			lspconfig.svelte.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
 			lspconfig.emmet_language_server.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.pylsp.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
@@ -106,10 +122,6 @@ return {
 				},
 			})
 			lspconfig.lemminx.setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-			lspconfig.svelte.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
@@ -143,10 +155,9 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-			lspconfig.volar.setup({})
 			lspconfig.nil_ls.setup({
 				capabilities = capabilities,
-				on_attach = on_attach
+				on_attach = on_attach,
 			})
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
