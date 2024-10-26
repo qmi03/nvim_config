@@ -48,6 +48,10 @@ return {
 				buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
 				buf_set_keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts)
 				buf_set_keymap("n", "<leader>lR", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+				vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+				vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
+				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+				vim.diagnostic.config({ update_in_insert = true })
 				client.server_capabilities.document_formatting = true
 			end
 			lspconfig.lua_ls.setup({
@@ -101,6 +105,10 @@ return {
 				on_attach = on_attach,
 			})
 			lspconfig.emmet_language_server.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			lspconfig.ruff.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
@@ -159,12 +167,10 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-			vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
-			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
-			vim.diagnostic.config({ update_in_insert = true })
+			lspconfig.taplo.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
 		end,
 	},
 	{
