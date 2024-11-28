@@ -10,6 +10,8 @@ return {
 		"echasnovski/mini.nvim",
 		config = function()
 			local statusline = require("mini.statusline")
+			-- local animate = require("mini.animate")
+			-- animate.setup()
 			statusline.setup({ use_icons = vim.g.have_nerd_fonts })
 			-- You can configure sections in the statusline by overriding their
 			-- default behavior. For example, here we set the section for

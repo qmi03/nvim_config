@@ -49,13 +49,14 @@ opt.backspace = "indent,eol,start"
 vim.schedule(function()
 	opt.clipboard:append("unnamedplus")
 end)
+
 -- split windows
 opt.splitright = true
 opt.splitbelow = true
 
 -- wildmenu
--- -- opt.wildmenu = true
--- -- opt.wildmode = "list:longest,list:full" -- don't insert, show options
+opt.wildmenu = true
+opt.wildmode = "list:longest,list:full" -- don't insert, show options
 
 -- save undo history
 opt.undofile = true
@@ -74,9 +75,12 @@ vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>")
 
 vim.g.have_nerd_font = true
 
+-- cd into current directory
 vim.cmd([[
-  command! CDC cd %:p:h
+  command! CdCurrDir cd %:p:h
 ]])
+-- copy file path to clipboard
+vim.cmd([[command! CopyFilePath let @+ = expand('%:p')]])
 
 -- greatest keymap ever
 vim.keymap.set("x", "<leader>p", '"_dP')
