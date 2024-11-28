@@ -21,6 +21,7 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
+			local utils = require("utils")
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
 			local util = require("lspconfig.util")
@@ -108,14 +109,61 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+
 			lspconfig.ruff.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-			lspconfig.pylsp.setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
+			if utils.executable("pylsp") then
+				local venv_path = os.getenv("VIRTUAL_ENV")
+				local py_path = nil
+				local curr_path = utils.check_python_executable()
+				if curr_path == nil or curr_path.path == nil then
+					py_path = vim.g.python3_host_prog
+				else -- decide which Python executable to use for mypy
+					if venv_path then
+						py_path = venv_path .. "/bin/python3"
+					else
+						py_path = curr_path.path
+					end
+				end
+				lspconfig.pylsp.setup({
+					on_attach = on_attach,
+					settings = {
+						pylsp = {
+							plugins = {
+								-- formatter options
+								black = { enabled = false },
+								autopep8 = { enabled = false },
+								yapf = { enabled = false },
+								-- linter options
+								-- wait for ruff to be stable for both linting and formatting then I'll be replacing black and pylint with ruff
+								pylint = { enabled = false, executable = "pylint" },
+								ruff = { enabled = false },
+								pyflakes = { enabled = false },
+								pycodestyle = { enabled = false },
+								-- type checker
+								pylsp_mypy = {
+									enabled = true,
+									overrides = { "--python-executable", py_path, "--ignore-missing-imports", false },
+									report_progress = true,
+									live_mode = false,
+								},
+								-- auto-completion options
+								jedi_completion = { fuzzy = true },
+								-- import sorting
+								isort = { enabled = true },
+							},
+						},
+					},
+					flags = {
+						debounce_text_changes = 200,
+					},
+					capabilities = capabilities,
+				})
+			else
+				vim.notify("pylsp not found!", vim.log.levels.WARN, { title = "Nvim-config" })
+			end
 			lspconfig.rust_analyzer.setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
@@ -137,24 +185,24 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-			lspconfig.clangd.setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-				cmd = {
-					"clangd",
-					"--header-insertion=never",
-					"--query-driver=/usr/bin/clang++,/opt/homebrew/opt/mpich/bin/mpicc",
-				}, -- Adjust driver paths as needed
-				init_options = {
-					clangdFileStatus = true,
-				},
-				settings = {
-					clangd = {
-						arguments = { "-I/opt/homebrew/opt/mpich/include" }, -- Include path for MPICH headers
-					},
-				},
-				formatter = "clang-format",
-			})
+			-- lspconfig.clangd.setup({
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- 	cmd = {
+			-- 		"clangd",
+			-- 		"--header-insertion=never",
+			-- 		"--query-driver=/usr/bin/clang++,/nix/store/3r1g247lp1hk7azfsnp9jyzsj4s4b4y2-mpich-4.2.3/bin/mpicc",
+			-- 	}, -- Adjust driver paths as needed
+			-- 	init_options = {
+			-- 		clangdFileStatus = true,
+			-- 	},
+			-- 	settings = {
+			-- 		clangd = {
+			-- 			arguments = { "-I/nix/store/3r1g247lp1hk7azfsnp9jyzsj4s4b4y2-mpich-4.2.3/include" }, -- Include path for MPICH headers
+			-- 		},
+			-- 	},
+			-- 	formatter = "clang-format",
+			-- })
 			lspconfig.sourcekit.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
@@ -168,6 +216,16 @@ return {
 				on_attach = on_attach,
 			})
 			lspconfig.taplo.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			-- Merge the capabilities
+			capabilities.workspace = capabilities.workspace or {}
+			capabilities.workspace.didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			}
+
+			lspconfig.sourcekit.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
