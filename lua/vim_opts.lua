@@ -55,8 +55,8 @@ opt.splitright = true
 opt.splitbelow = true
 
 -- wildmenu
-opt.wildmenu = true
-opt.wildmode = "list:longest,list:full" -- don't insert, show options
+-- opt.wildmenu = true
+-- opt.wildmode = "list:longest,list:full" -- don't insert, show options
 
 -- save undo history
 opt.undofile = true
