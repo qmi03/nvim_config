@@ -1,3 +1,4 @@
+vim.g.mapleader = " "
 local opt = vim.opt -- for conciseness
 
 vim.g.mapleader = " "
@@ -5,6 +6,8 @@ vim.g.background = "light"
 -- line numbers
 opt.relativenumber = true
 opt.number = true
+
+vim.api.nvim_create_user_command('W', 'write',{ desc = "Fix vim write command to use when accidentally use capital w"})
 
 -- tabs & indentation
 opt.tabstop = 2

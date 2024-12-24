@@ -108,6 +108,12 @@ return {
 				end,
 				-- This function defines what will never be shown, even when `show_hidden` is set
 				is_always_hidden = function(name, bufnr)
+					local always_hidden = { "__pycache__", ".DS_Store" }
+					for _, hidden_name in ipairs(always_hidden) do
+						if name == hidden_name then
+							return true
+						end
+					end
 					return false
 				end,
 				-- Sort file names in a more intuitive order for humans. Is less performant,
