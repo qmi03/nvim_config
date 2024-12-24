@@ -7,7 +7,11 @@ vim.g.background = "light"
 opt.relativenumber = true
 opt.number = true
 
-vim.api.nvim_create_user_command('W', 'write',{ desc = "Fix vim write command to use when accidentally use capital w"})
+vim.api.nvim_create_user_command(
+  "W",
+  "write",
+  { desc = "Fix vim write command to use when accidentally use capital w" }
+)
 
 -- tabs & indentation
 opt.tabstop = 2
@@ -35,10 +39,10 @@ opt.smartcase = true
 -- highlight current line
 opt.cursorline = true
 vim.o.guicursor = table.concat({
-	"n-v-c:block-Cursor/lCursor", -- No blink for normal, visual, and command modes
-	"i-ci-ve:block/lCursor-blinkwait500-blinkoff500-blinkon500", -- Blink in insert modes
-	"r-cr:hor20-Cursor/lCursor", -- No blink for replace modes
-	"o:hor50-Cursor/lCursor", -- No blink for operator-pending mode
+  "n-v-c:block-Cursor/lCursor", -- No blink for normal, visual, and command modes
+  "i-ci-ve:block/lCursor-blinkwait500-blinkoff500-blinkon500", -- Blink in insert modes
+  "r-cr:hor20-Cursor/lCursor", -- No blink for replace modes
+  "o:hor50-Cursor/lCursor", -- No blink for operator-pending mode
 }, ",")
 
 -- appearance
@@ -50,7 +54,7 @@ opt.backspace = "indent,eol,start"
 
 -- clipboard sync with OS clipboard
 vim.schedule(function()
-	opt.clipboard:append("unnamedplus")
+  opt.clipboard:append "unnamedplus"
 end)
 
 -- split windows
@@ -63,7 +67,7 @@ opt.splitbelow = true
 
 -- save undo history
 opt.undofile = true
-opt.iskeyword:append("-")
+opt.iskeyword:append "-"
 
 opt.updatetime = 250
 opt.swapfile = false
@@ -79,11 +83,11 @@ vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>")
 vim.g.have_nerd_font = true
 
 -- cd into current directory
-vim.cmd([[
+vim.cmd [[
   command! CdCurrDir cd %:p:h
-]])
+]]
 -- copy file path to clipboard
-vim.cmd([[command! CopyFilePath let @+ = expand('%:p')]])
+vim.cmd [[command! CopyFilePath let @+ = expand('%:p')]]
 
 -- greatest keymap ever
 vim.keymap.set("x", "<leader>p", '"_dP')
@@ -104,9 +108,12 @@ opt.scrolloff = 12
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup(
+    "kickstart-highlight-yank",
+    { clear = true }
+  ),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })

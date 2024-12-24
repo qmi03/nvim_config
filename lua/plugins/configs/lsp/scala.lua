@@ -21,20 +21,36 @@ return {
       buf_set_keymap("n", "gD", "<cmd>Telescope lsp_type_definitions<CR>", opts)
       buf_set_keymap("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
       buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-      buf_set_keymap("n", "gh", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+      buf_set_keymap(
+        "n",
+        "gh",
+        "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+        opts
+      )
       buf_set_keymap("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
       buf_set_keymap("n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
       buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
       buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
-      buf_set_keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts)
-      buf_set_keymap("n", "<leader>lR", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+      buf_set_keymap(
+        "n",
+        "<leader>ll",
+        "<cmd>lua vim.lsp.codelens.run()<cr>",
+        opts
+      )
+      buf_set_keymap(
+        "n",
+        "<leader>lR",
+        "<cmd>lua vim.lsp.buf.rename()<cr>",
+        opts
+      )
       client.server_capabilities.document_formatting = true
     end
 
     return metals_config
   end,
   config = function(self, metals_config)
-    local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+    local nvim_metals_group =
+      vim.api.nvim_create_augroup("nvim-metals", { clear = true })
     vim.api.nvim_create_autocmd("FileType", {
       pattern = self.ft,
       callback = function()
